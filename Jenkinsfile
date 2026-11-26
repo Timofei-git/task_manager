@@ -10,6 +10,21 @@ pipeline {
         stage('Checkout') { steps { checkout scm } }
         stage('Toolchain') { steps { bat 'java -version'; bat 'mvn -version'; bat 'git --version' } }
         stage('Build and Verify') { steps { bat 'mvn -B -ntp clean verify' } }
+
+        stage('Verify JAR') {
+            steps {
+                script {
+                    def jarPath = 'target/task-manager-cicd-1.0.0.jar'
+
+                    if (!fileExists(jarPath)) {
+                        error("JAR file not found: ${jarPath}")
+                    }
+
+                    echo "JAR verification successful: ${jarPath}"
+                }
+            }
+        }
+
         stage('Generate Reports') { steps { bat 'mvn -B -ntp surefire-report:report-only'; bat 'mvn -B -ntp jacoco:report' } }
     }
     post {
