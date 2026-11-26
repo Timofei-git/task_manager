@@ -7,9 +7,11 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+
 concurrency:
-  group: java-ci-${{ github.ref }}
+  group: ${{ github.event_name == 'pull_request' && format('java-ci-pr-{0}', github.event.pull_request.number) || format('java-ci-branch-{0}', github.ref) }}
   cancel-in-progress: true
+
 jobs:
   verify:
     name: Build, unit and integration tests
