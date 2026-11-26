@@ -73,7 +73,7 @@ null).priority());
         assertEquals(List.of(low.id(), low2.id()),
 result.stream().map(Task::id).toList());
         assertTrue(result.stream().allMatch(task -> task.priority() ==
-TaskPriority.HIGH));
+TaskPriority.LOW));
     }
 
     @Test
